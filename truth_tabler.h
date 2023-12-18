@@ -1,13 +1,15 @@
 #ifndef TRUTH_TABLER_H
 # define TRUTH_TABLER_H
 
-#include <sdtbool.h>
+#include <stdbool.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
 typedef struct s_bool_array
 {
-	bool	*content;
-	size_t	len;
+	bool	*array;
+	size_t	size;
 }	t_barr;
 
 #endif
