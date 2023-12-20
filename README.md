@@ -1,4 +1,4 @@
-Truth tabler - A graphical truth table builder and displayer
+Truth tabler - A graphical truth table builder and displayer | WORK IN PROGRESS
 
 For this program to work, the inputted expression must conform to the following syntax.
 
@@ -10,13 +10,13 @@ Where :
 - `operator` is a supported logic operator (see list below);
 - `param` are either input bits or other logic operators with their own parameters.
 
-Logic operators must have their parameters inbetween parenthesis, all separated by a comma. The syntax is entirely loose on whitespace caracters. Input bits' names are sensitive to the case, but logic operators are not. Input bits' names must not contain parenthesis ('(', ')'), commas (','), withespaces (' ' and 9 to 13 in ASCII table), nor can they be logic operator names (see list below).
+Logic operators must have their parameters inbetween parenthesis, all separated by a comma. The syntax is entirely loose on whitespace caracters. Input bits' names are sensitive to the case, but logic operators are not. Input bits' names must not contain parenthesis (`(`, `)`), commas (`,`), withespaces (` ` (space) and 9 to 13 in ASCII table), nor can they be logic operator names (see list below).
 
 Valid syntax example :
 
 - `xoR( NAND(LoReM, ipsum), xor  (dolor,  Ipsum,sIt),aNd ( OR(AMET,sIt, LoReM ), and(NOt ( AMET ),dolor)  ))`
 
-In this example, there are 6 input bits (`LoReM`, `ipsum`, `Ipsum`, `dolor`, `sIt`, `AMET`). This leads to 2^6 = 64 different input combinations.
+In this example, there are 6 input bits (`LoReM`, `ipsum`, `Ipsum`, `dolor`, `sIt`, `AMET`). This leads to 2⁶ = 64 different input combinations.
 
 Invalid syntax example :
 
