@@ -90,12 +90,10 @@ bool	is_gate(char *s)
 	while (gate < 7)
 	{
 		i = 0;
-		while (s[i] && gates[gate][i] == s[i])
-		{
-			if (!gates[gate][i])
-				return (1);
+		while (s[i] && gates[gate][i] == lower(s[i]))
 			i++;
-		}
+		if (!gates[gate][i])
+			return (gate);
 		gate++;
 	}
 	return (0);
@@ -125,29 +123,27 @@ char	lower(char c)
 
 size_t	count_inputs(char *expression)
 {
-	size_t	n_inputs;
+	size_t	count;
 	size_t	i;
 	char	c;
 
-	n_inputs = 0;
+	count = 0;
 	i = 0;
-	c = lower(expression[i]);
+	c = expression[i];
 	while (c)
 	{
-		if (in(c, "noxa") && is_gate(&c))
-			//start of a gate
+		if (!in(c, " \t\n\v\r\f(),") && !is_gate(&c))
+			count++;//deplacer, mais pk pas utiliser listes chainees au final ?
 		i++;
-		c = lower(expression[i]);
+		c = expression[i];
 	}
-	return (n_inputs);
+	return (count);
 }
 
-char	*input_census(char *expression)
+char	*input_census(char *expression, size_t n_inputs)
 {
 	char	*input_name;
-	size_t	n_inputs;
 
-	n_inputs = count_inputs(expression);
 	input_name = malloc((n_input + 1) * sizeof(char *));
 	if (!input_name)
 		return (NULL);
@@ -159,7 +155,16 @@ char	*input_census(char *expression)
 	return (input_name);
 }
 
+bool	print_error(short error_code)
+{
+	char	*errors[4] = {"Error : incorrect number of arguments provided.",
+		"Error : incorrect syntax.",
+		"Error : invalid number of input bits (< 1 or > 64).",
+		"Error : failed memory allocation."}
 
+	write(1, errors[error_code], strlen(errors[error_code]));
+	return (1);
+}
 
 int	main(int argc, char **argv)// n_inputs <= 64
 {
@@ -168,33 +173,18 @@ int	main(int argc, char **argv)// n_inputs <= 64
 	t_barr	**input_comb;
 
 	if (argc != 2)
-	{
-		write(1, "Error : incorrect number of arguments provided.", 47);
-		return (1);
-	}
+		return (print_error(0));
 	if (check_syntax(argv[1]))
-	{
-		write(1, "Error : incorrect syntax.", 24);
-		return (1);
-	}
-	input_name = input_census(argv[1]);
+		return (print_error(1));
+	n_inputs = count_input(argv[1]);
+	if (!n_inputs || n_input > 64)
+		return (print_error(2));
+	input_name = input_census(argv[1], n_input);
 	if (!input_name)
-	{
-		write(1, "Error : failed memory allocation.", 33);
-		return (1);
-	}
-	n_inputs = count_inputs(argv[1]);
-	if (!n_inputs || n_inputs > 64)
-	{
-		write(1, "Error : invalid number of input bits (< 1 or > 64).", 51);
-		return (1);
-	}
+		return (print_error(3));
 	input_comb = alloc_barr_inputs(n_inputs);
 	if (!input_comb)
-	{
-		write(1, "Error : failed memory allocation.", 33);
-		return (1);
-	}
+		return (print_error(3));
 	free_barr(input_comb);
 	return (0);
 }
